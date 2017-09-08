@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 def findApproximateValuesThatWillMaximiseDValue(predictionListStats, experimentalDataStats):
     '''Helper function for findMaximumDValue: Finds an approximate table values to maximise D.
     Given the values of q+, q-, q0, n+, n- and n0 this function will produce the approximate values

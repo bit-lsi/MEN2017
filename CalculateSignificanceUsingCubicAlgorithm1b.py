@@ -1,10 +1,13 @@
+# -*- coding: utf-8 -*-
+
+import math
+
 def calculateSignificanceUsingCubicAlgorithm1b(hypScore, predictionListStats, expDataStats, epsilon):
     '''Calculate the p-value of a score given the hypothesis score and the 
     distribution table (calculated using the cubic algorithm  1b in 
     Assessing statistical significance in causal graphs - Chindelevitch et al) 
     '''
-    import math
-    # Calculate the log of the factorial for all values in predictionListStats, 
+    # Calculate the log of the factorial for all values in predictionListStats,
     #this is to reduce the number of computations done later on.
     logOfFactorialOfPredictionListStats = [math.log(math.factorial(n)) for n in predictionListStats]
     logDMax = findMaximumDValue(predictionListStats, experimentalDataStats, logOfFactorialOfPredictionListStats, TRUE)
@@ -41,4 +44,4 @@ def calculateSignificanceUsingCubicAlgorithm1b(hypScore, predictionListStats, ex
     
     pValue = weights[0]/weights[1]
     
-    return(pValue)
+    return pValue

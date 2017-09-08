@@ -1,5 +1,4 @@
-
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
 # ## Implementation of CalculateSignificanceUsingCubicAlgorithm1b.r
 # 

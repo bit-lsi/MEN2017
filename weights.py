@@ -20,7 +20,8 @@ def calculae_weight_given_values_in_three_by_three_contingency_table(threeByThre
         return (sum(logOfFactorialOfPredictionListStats) - sum(math.log(math.factorial(threeByThreeContingencyTable))))
     else:
         return (
-        exp(sum(logOfFactorialOfPredictionListStats) - sum(math.log(math.factorial(threeByThreeContingencyTable)))))
+            math.exp(
+                sum(logOfFactorialOfPredictionListStats) - sum(math.log(math.factorial(threeByThreeContingencyTable)))))
 
 
 def get_weights_above_hypothesis_score_for_a_three_by_two_table(

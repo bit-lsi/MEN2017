@@ -5,7 +5,7 @@ import math
 
 def calculae_weight_given_values_in_three_by_three_contingency_table(threeByThreeContingencyTable,
                                                                      logOfFactorialOfPredictionListStats,
-                                                                     returnlog=FALSE):
+                                                                     returnlog=False):
     """Given the values in the three by three contingency table and the values of the number of positive/negative/non-significant predictions (q+, q-, q0) this function calculates the D-value (or weight).
     
     :param threeByThreeContingencyTable a 3x3 contingency table
@@ -54,7 +54,7 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
         total = n_p + n_m
 
         if total > 0:
-            n_pp = ceiling(r_p * n_p / total)
+            n_pp = math.ceil(r_p * n_p / total)
         else:
             n_pp = 0
 
@@ -66,7 +66,7 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
 
             if (total > 0)
         {
-            n_pp < - ceiling(r_p * n_p / total)
+            n_pp < - math.ceil(r_p * n_p / total)
         } else {
             n_pp < - 0
         }

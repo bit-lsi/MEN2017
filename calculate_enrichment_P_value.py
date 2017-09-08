@@ -4,17 +4,12 @@ import numpy as np
 import scipy.stats as stats
 
 
-# ' @title get set of significant predictions
-# ' @description
-# ' Gets the set of positive and negative predictions, the combination of the sets Sh+ and Sh- in Causal reasoning on biological networks: Interpreting transcriptional changes,  L Chindelevitch et al.
-# ' @param predictions a table of predictions
-# ' @return a matrix of positive and negative predictions
-
-# ' @references
-# ' L Chindelevitch et al.
-# ' Causal reasoning on biological networks: Interpreting transcriptional changes.
-# ' Bioinformatics, 28(8):1114-21, 2012.
 def get_set_of_significant_predictions(predictions):
+    """  Gets the set of positive and negative predictions, the combination of the sets Sh+ and Sh-
+
+    :param predictions:
+    :return:
+    """
     counter = 0
     num_predictions = predictions.shape[0]
     significant_predictions = np.zeros((num_predictions, 1))
@@ -28,17 +23,12 @@ def get_set_of_significant_predictions(predictions):
     return significant_predictions
 
 
-# ' @title get set of differientially expressed genes
-# ' @description
-# ' Gets the set of differentially expressed genes in the results, G+ as defined by in Causal reasoning on biological networks: Interpreting transcriptional changes,  L Chindelevitch et al.
-# ' @param results a table of results
-# ' @return a matrix of differentially expressed genes
-
-# ' @references
-# ' L Chindelevitch et al.
-# ' Causal reasoning on biological networks: Interpreting transcriptional changes.
-# ' Bioinformatics, 28(8):1114-21, 2012.
 def get_set_of_differentially_expressed_genes(results):
+    """ Gets the set of differentially expressed genes in the results, G+ as defined by in Causal reasoning on biological networks
+
+    :param results:
+    :return:
+    """
     counter = 0
     num_results = results.shape[0]
     differentially_expressed_genes = np.zeros((num_results, 1))
@@ -52,20 +42,9 @@ def get_set_of_differentially_expressed_genes(results):
     return differentially_expressed_genes
 
 
-# ' calculates an enrichment p-value
-# ' @description
-# ' Calculate a enrichment p-value for a given hypothesis by comparing the corresponding predicted and observed gene changes
-
-# ' @export
-# ' @concept CausalR
-# ' @param  predictions  predictions of changes from the CCG for a particular hypothesis
-# ' @param  results  gene changes observed in the experimental data
-# ' @return  an enrichment p-value
-# ' @examples
-# ' predictions <- matrix(c(1,2,3,1,1,-1), ncol = 2)
-# ' results<- matrix(c(1,2,3,4,1,1,-1,1), ncol = 2)
 def calculate_enrichment_p_value(predictions, results):
-    """
+    """ Calculate a enrichment p-value for a given hypothesis by comparing the corresponding predicted and observed
+     gene changes
 
     :param predictions:
     :param numpy.array results:

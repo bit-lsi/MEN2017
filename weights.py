@@ -1,5 +1,23 @@
 # -*- coding: utf-8 -*-
 
+def calculae_weight_given_values_in_three_by_three_contingency_table(threeByThreeContingencyTable, logOfFactorialOfPredictionListStats, returnlog = FALSE):
+    """Given the values in the three by three contingency table and the values of the number of positive/negative/non-significant predictions (q+, q-, q0) this function calculates the D-value (or weight).
+    
+    :param threeByThreeContingencyTable a 3x3 contingency table
+    :param logOfFactorialOfPredictionListStats log of Factorial of prediction statistics
+    :param returnlog should the result be returned as a log value. Default is FALSE.
+    
+    :return a D-value (or weight)
+    """
+    
+    #The D value is defined as: (q+! / (n++! * n+-! * n+0!)) * (q-! / (n-+! * n--! * n-0!)) * (q0! / (n0+! * n0-! * n00!))
+    if returnlog:
+        return (sum(logOfFactorialOfPredictionListStats) - sum(lfactorial(threeByThreeContingencyTable)))
+    else:
+        return(exp(sum(logOfFactorialOfPredictionListStats) - sum(lfactorial(threeByThreeContingencyTable))))
+
+
+
 def get_weights_above_hypothesis_score_for_a_three_by_two_table(
         weights, r_p, r_m, r_z, n_p, n_m, predictionListStats, experimentalDataStats,
         logOfFactorialOfPredictionListStats,

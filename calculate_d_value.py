@@ -61,29 +61,30 @@ def get_maximum_d_value_from_2_x_2_contingency_table(contingency_table, predicti
     @return the maximal D-value'''
 
     # We need to find all the combinations (maximum of 16) when applying the rounding to the values in twoByTwoContingencyTable.  The exception is if
-    # all four values are integers.  combinationsOfRounding will be a nx4 matrix containing the possible values of n_pp, n_pm, n_mp, n_mm
+    # all four values are integers.  combinations_rounding will be a nx4 matrix containing the possible values of n_pp, n_pm, n_mp, n_mm
     if np.round(contingency_table) == contingency_table:
         # All four values are integers --> twoByTwoContingencyTable = [n_pp, n_pm, n_mp, n_mm] (c(...) in R)
-        combinationsOfRounding = np.matrix(contingency_table)  # , ncol = 4)
+        combinations_rounding = np.matrix(contingency_table)  # , ncol = 4)
     else:
-        combinationsOfRounding = get_all_rounding_combinations(contingency_table)
+        combinations_rounding = get_all_rounding_combinations(contingency_table)
 
     maximumDValue = 0
 
-    for i in range(combinationsOfRounding.shape[0]):  # nrwo in R (loop over number of rows of the matrix)
-        numbersOfCorrectandIncorrectPredictions = combinationsOfRounding[
+    for i in range(combinations_rounding.shape[0]):  # nrwo in R (loop over number of rows of the matrix)
+        numbers_correctand_incorrect_predictions = combinations_rounding[
             i]  # get all elements of the i-th row ([i,] in R)
-        threeByThreeContingencyTable = populateTheThreeByThreeContingencyTable(
-            numbersOfCorrectandIncorrectPredictions[0, 0], numbersOfCorrectandIncorrectPredictions[0, 1],
-            numbersOfCorrectandIncorrectPredictions[0, 2], numbersOfCorrectandIncorrectPredictions[0, 3],
+        three_x_three_contingency_table = populateTheThreeByThreeContingencyTable(
+            numbers_correctand_incorrect_predictions[0, 0], numbers_correctand_incorrect_predictions[0, 1],
+            numbers_correctand_incorrect_predictions[0, 2], numbers_correctand_incorrect_predictions[0, 3],
             prediction_stats, experimental_data_stats)
         # Some of the combinationations produce an invalid contingency table - this we can check by seeing if any of the values in the table are negative.
-        if threeByThreeContingencyTable.min() >= 0:  # if 3x3ContTable is matrix or nparray! otherwise change to min(x)
-            weight = calculate_weight_given_values_in_three_by_three_contingency_table(threeByThreeContingencyTable,
+        if three_x_three_contingency_table.min() >= 0:  # if 3x3ContTable is matrix or nparray! otherwise change to min(x)
+            weight = calculate_weight_given_values_in_three_by_three_contingency_table(three_x_three_contingency_table,
                                                                               log_of_factorial_prediction_stats,
                                                                               return_log)
             # what type is weight? If not integer/float, max needs to be changed (e.g. for list max(max(weight), maximumDValue))
             maximumDValue = max(maximumDValue, weight)
+
     return maximumDValue
 
 
@@ -100,12 +101,12 @@ def find_maximum_d_value(prediction_stats, experimental_data_stats, log_factoria
 
     contingency_table = find_approximate_values_maximise_d_value(prediction_stats, experimental_data_stats)
 
-    maximumDValue = get_maximum_d_value_from_2_x_2_contingency_table(contingency_table, prediction_stats,
+    maximum_d_value = get_maximum_d_value_from_2_x_2_contingency_table(contingency_table, prediction_stats,
                                                                      experimental_data_stats,
                                                                      log_factorial_prediction_stats,
                                                                      returnlog)
 
-    return maximumDValue
+    return maximum_d_value
 
 
 def get_weights_above_hypothesis_score_for_3_2_table(weights, r_p, r_m, r_z, n_p, n_m, predictionListStats,

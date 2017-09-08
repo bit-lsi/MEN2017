@@ -45,24 +45,26 @@ def get_max_D_value_for_a_three_by_two_family(r_p, r_m, r_z, n_p, n_m, predictio
         n_zp = 0
         n_zm = 0
 
-    threeByTwoContingencyTable = [n_pp, n_pm, n_mp, n_mm, n_zp, n_zm]
+    three_two_contingency_table = [n_pp, n_pm, n_mp, n_mm, n_zp, n_zm]
 
-    maximumDFamValue = get_approximate_maximum_d_value_from_three_by_two_contingency_table(threeByTwoContingencyTable,
-                                                                                           predictionListStats,
-                                                                                           logOfFactorialOfPredictionListStats,
-                                                                                           returnlog)
+    maximum_d_fam_value = get_approximate_maximum_d_value_from_three_by_two_contingency_table(
+        three_two_contingency_table,
+        predictionListStats,
+        logOfFactorialOfPredictionListStats,
+        returnlog)
 
-    return maximumDFamValue
+    return maximum_d_fam_value
 
 
-def calculate_weight_given_values_in_three_by_three_contingency_table(threeByThreeContingencyTable,
-                                                                      logOfFactorialOfPredictionListStats,
-                                                                      returnlog=False):
+def calculate_weight_given_values_in_three_by_three_contingency_table(
+        three_x_three_contingency_table,
+        log_factorial_prediction_stats,
+        returnlog=False):
     """Given the values in the three by three contingency table and the values of the number of positive/negative/
     non-significant predictions (q+, q-, q0) this function calculates the D-value (or weight).
     
-    :param threeByThreeContingencyTable a 3x3 contingency table
-    :param logOfFactorialOfPredictionListStats log of Factorial of prediction statistics
+    :param three_x_three_contingency_table a 3x3 contingency table
+    :param log_factorial_prediction_stats log of Factorial of prediction statistics
     :param returnlog should the result be returned as a log value. Default is FALSE.
     
     :return a D-value (or weight)
@@ -70,11 +72,11 @@ def calculate_weight_given_values_in_three_by_three_contingency_table(threeByThr
 
     # The D value is defined as: (q+! / (n++! * n+-! * n+0!)) * (q-! / (n-+! * n--! * n-0!)) * (q0! / (n0+! * n0-! * n00!))
     if returnlog:
-        return sum(logOfFactorialOfPredictionListStats) - sum(math.log(math.factorial(threeByThreeContingencyTable)))
+        return sum(log_factorial_prediction_stats) - sum(math.log(math.factorial(three_x_three_contingency_table)))
     else:
         return (
             math.exp(
-                sum(logOfFactorialOfPredictionListStats) - sum(math.log(math.factorial(threeByThreeContingencyTable)))))
+                sum(log_factorial_prediction_stats) - sum(math.log(math.factorial(three_x_three_contingency_table)))))
 
 
 def get_weights_above_hypothesis_score_for_a_three_by_two_table(
@@ -144,9 +146,9 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
                 if min(contingencyTableValues) < 0:
                     continue
 
-                threeByThreeContingencyTable = [m_pp, m_pm, m_pz, m_mp, m_mm, m_mz, m_zp, m_zm, m_zz]
+                three_by_three_contingency_table = [m_pp, m_pm, m_pz, m_mp, m_mm, m_mz, m_zp, m_zm, m_zz]
                 logDValue = sum(log_of_factorial_of_prediction_list_stats) - sum(
-                    math.log(math.factorial(threeByThreeContingencyTable)))
+                    math.log(math.factorial(three_by_three_contingency_table)))
                 # Only need to compute the score if the D-value is non-neglible
                 if logDValue <= logepsDMax:
                     continue
@@ -185,9 +187,9 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
                         if min(contingencyTableValues) < 0:
                             continue
 
-                        threeByThreeContingencyTable = [m_pp, m_pm, m_pz, m_mp, m_mm, m_mz, m_zp, m_zm, m_zz]
+                        three_by_three_contingency_table = [m_pp, m_pm, m_pz, m_mp, m_mm, m_mz, m_zp, m_zm, m_zz]
                         logDValue = math.log(math.factorial(log_of_factorial_of_prediction_list_stats)) - math.log(
-                            math.factorial(threeByThreeContingencyTable))
+                            math.factorial(three_by_three_contingency_table))
 
                         # Only need to compute the score if the D-value is non-neglible
                         if logDValue <= logepsDMax:

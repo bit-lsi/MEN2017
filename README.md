@@ -1,3 +1,3 @@
-# bit_lab
+# BiT Lab
 
 Cleaner implementation of CausalR

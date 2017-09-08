@@ -196,6 +196,6 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
 
         if (m_pp + m_mm - (m_pm + m_mp) >= hypothesisScore):
 
-            weights[1] = weights[1] + weight_contrib
+            weights[1] =hts weights[1] + weight_contrib
 
         return weights

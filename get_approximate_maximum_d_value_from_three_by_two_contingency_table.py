@@ -15,21 +15,3 @@
 # ' @param returnlog return the result as a log, default is FALSE
 # ' @return an approximate maximum D value or weight
 
-
-def get_approximate_maximum_d_value_from_three_by_two_contingency_table(three_by_two_contingency_table, prediction_list_stats,
-                                                                        log_of_factorial_of_prediction_list_stats,
-                                                                        returnlog=False):
-
-
-# *** Summary *** Description: A function that will compute an approximate maximum D value (or weight) for a superfamily (3x2 table).  The reason it
-# is described as approiximate is that this function returns the first valid D value that is found. This has been done to speed up the overall
-# algorithm.
-
-
-    n_pz = prediction_list_stats[1] - (three_by_two_contingency_table[1] + three_by_two_contingency_table[2])
-    n_mz = prediction_list_stats[2] - (three_by_two_contingency_table[3] + three_by_two_contingency_table[4])
-    n_zz = prediction_list_stats[3] - (three_by_two_contingency_table[5] + three_by_two_contingency_table[6])
-    three_by_three_contingency_table = [three_by_two_contingency_table, n_pz, n_mz, n_zz]
-    weight = calculate_weight_given_values_in_three_by_three_contingency_table(three_by_three_contingency_table,
-                                                                      log_of_factorial_of_prediction_list_stats, returnlog)
-    return (weight)

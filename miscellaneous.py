@@ -120,3 +120,4 @@ def compute_final_distribution(result_matrix):
     distribution_matrix = distribution_matrix[0:counter, :]
 
     return distribution_matrix
+

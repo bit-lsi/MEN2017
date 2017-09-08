@@ -99,7 +99,7 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
     :return:
     """
 
-    log_approx_d_family_max = get_max_d_value_for_a_three_by_two_family(r_p, r_m, r_z, n_p, n_m, prediction_list_stats,
+    log_approx_d_family_max = get_max_D_value_for_a_three_by_two_family(r_p, r_m, r_z, n_p, n_m, prediction_list_stats,
                                                                         log_of_factorial_of_prediction_list_stats, True)
 
     # To reduce the overall runtime of the algorithm, the approximate maxDValue for the family is calculated, rather than the actual.

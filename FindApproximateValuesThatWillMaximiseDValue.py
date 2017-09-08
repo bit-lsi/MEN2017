@@ -11,12 +11,10 @@ def findApproximateValuesThatWillMaximiseDValue(predictionListStats, experimenta
         numbers of positive, negative and non-significant/contradictory predictions
     @return a 2x2 contingency table which approximately maximises D'''
  
-    q_p = predictionListStats[0]
-    q_m = predictionListStats[1]
-    
-    n_p = experimentalDataStats[0]
-    n_m = experimentalDataStats[1]
-    
+    q_p, q_m = predictionListStats[0:2]
+
+    n_p,n_m = experimentalDataStats[0:2]
+
     Tval = sum(predictionListStats)
     # The values of n++, n+-, n-+ and n-- that give the maximum D-value are given by the formula within the paper - Assessing statistical significance
     # in causal graphs, page 6.  The formula is n_ab is approximately equal to q_a*n_b/T, where T = q+ + q- + q0 = n+ + n- + n0, and a,b are either + or

@@ -8,16 +8,18 @@ def calculateSignificanceUsingCubicAlgorithm1b(hypScore, predictionListStats, ex
     #this is to reduce the number of computations done later on.
     logOfFactorialOfPredictionListStats = [math.log(math.factorial(n)) for n in predictionListStats]
     logDMax = findMaximumDValue(predictionListStats, experimentalDataStats, logOfFactorialOfPredictionListStats, TRUE)
-    
+
     # Number of positive predictions from the network. This will be an upper bound for r+ (r_p)
-    q_p = predictionListStats[0] #c(up, down, ambig)
+    q_p, q_m = predictionListStats[0:2]
+
     # Number of negative predictions from the network. This will be an upper bound for r- (r_m)
     q_m = predictionListStats[1]
-    
+
     # Number of positive results. This will be an upper bound for c+ (c_p)
-    n_p = experimentalDataStats[0] #c(up, down, nochange)
     # Number of negative results. This will be an upper bound for c- (c_m)
-    n_m = experimentalDataStats[1]
+    n_p, n_m = experimentalDataStats[0:2]
+
+
     
     # Array for the D values - first element is the total D values which have a score equal to or better than the cut-off, second element is all D
     # values (i.e. the ratio is the P value).

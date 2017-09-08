@@ -1,4 +1,6 @@
-def getMaximumDValueFromTwoByTwoContingencyTable(twoByTwoContingencyTable, predictionListStats, experimentalDataStats, logOfFactorialOfPredictionListStats, 
+import numpy as np
+
+def getMaximumDValueFromTwoByTwoContingencyTable(twoByTwoContingencyTable, predictionListStats, experimentalDataStats, logOfFactorialOfPredictionListStats,
         returnlog):
     '''Helper function for findMaximumDValue: Get maximum D value from two-by-two contingency table 
         - computes the maximum D value (or weight) given approximate values of n++, n+-, n-+ and n--.
@@ -15,7 +17,6 @@ def getMaximumDValueFromTwoByTwoContingencyTable(twoByTwoContingencyTable, predi
     @param returnlog whether or not he value should be returned as a log (TRUE) or not (FALSE)
     @return the maximal D-value'''
     
-    import numpy as np
     # We need to find all the combinations (maximum of 16) when applying the rounding to the values in twoByTwoContingencyTable.  The exception is if
     # all four values are integers.  combinationsOfRounding will be a nx4 matrix containing the possible values of n_pp, n_pm, n_mp, n_mm
     if np.round(twoByTwoContingencyTable) == twoByTwoContingencyTable:

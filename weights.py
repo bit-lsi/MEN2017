@@ -21,9 +21,10 @@ def get_max_D_value_for_a_three_by_two_family(r_p, r_m, r_z, n_p, n_m, predictio
                                               logOfFactorialOfPredictionListStats, returnlog=False):
     total = n_p + n_m
 
-    # Compute the values of n++, n+-, n-+, n--, n0+, and n0- that maximise the D-value; these correspond to the following formula:
-    # n_ab is approximately equal to q_a*n_b/T, where T = n+ + n-, and a,b are either + or -.
-    # See Assessing statistical significance in causal graphs, page 7 - the formula is not stated explicitly but follows from the logic of algorithm 1a).
+    # Compute the values of n++, n+-, n-+, n--, n0+, and n0- that maximise the D-value; these correspond to the
+    #  following formula: n_ab is approximately equal to q_a*n_b/T, where T = n+ + n-, and a,b are either + or -.
+    # See Assessing statistical significance in causal graphs, page 7 - the formula is not stated explicitly
+    # but follows from the logic of algorithm 1a).
 
     if total > 0:
         n_pp = math.ceil(r_p * n_p / total)
@@ -57,7 +58,8 @@ def get_max_D_value_for_a_three_by_two_family(r_p, r_m, r_z, n_p, n_m, predictio
 def calculate_weight_given_values_in_three_by_three_contingency_table(threeByThreeContingencyTable,
                                                                       logOfFactorialOfPredictionListStats,
                                                                       returnlog=False):
-    """Given the values in the three by three contingency table and the values of the number of positive/negative/non-significant predictions (q+, q-, q0) this function calculates the D-value (or weight).
+    """Given the values in the three by three contingency table and the values of the number of positive/negative/
+    non-significant predictions (q+, q-, q0) this function calculates the D-value (or weight).
     
     :param threeByThreeContingencyTable a 3x3 contingency table
     :param logOfFactorialOfPredictionListStats log of Factorial of prediction statistics

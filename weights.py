@@ -3,7 +3,7 @@
 import math
 
 
-def calculae_weight_given_values_in_three_by_three_contingency_table(threeByThreeContingencyTable,
+def calculate_weight_given_values_in_three_by_three_contingency_table(threeByThreeContingencyTable,
                                                                      logOfFactorialOfPredictionListStats,
                                                                      returnlog=False):
     """Given the values in the three by three contingency table and the values of the number of positive/negative/non-significant predictions (q+, q-, q0) this function calculates the D-value (or weight).

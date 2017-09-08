@@ -104,6 +104,10 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
 
     # To reduce the overall runtime of the algorithm, the approximate maxDValue for the family is calculated, rather than the actual.
     if log_approx_d_family_max > logepsDMax:
+        # Calculate the values of n++ and n-+ that were used to calculate approxDFamilyMax
+
+        # t = n_p + n_m ( the sum of all the values in the 3x2 submatrix)
+
         total = n_p + n_m
 
         if total > 0:
@@ -111,54 +115,41 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
         else:
             n_pp = 0
 
-        {
-            # Calculate the values of n++ and n-+ that were used to calculate approxDFamilyMax
-
-            # t = n_p + n_m ( the sum of all the values in the 3x2 submatrix)
-            total < - n_p + n_m
-
-            if (total > 0)
-        {
-            n_pp < - math.ceil(r_p * n_p / total)
-        } else {
-            n_pp < - 0
-        }
-
         # Iterate over possible values of n++, starting from the one calculated above.  Since the values decrease monotonically either side of this value,
         # we start at this value and iterate in both directions until the D value is less than a given threshold. This will give us the non-neglible parts
         # of the distribution.
 
         # An upper bound for possible values of n++ is the minimum of r+ and n+
-        for (m_pp in n_pp: min(r_p, n_p)) {
+        for m_pp in range(n_pp, min(r_p, n_p)):
 
-        # We still need to define one more value in the 3x2 matrix to determine all the rest n+- is bounded by the minumum of r- and n+
-        for (m_mp in 0: min(r_m, n_p)) {
+            # We still need to define one more value in the 3x2 matrix to determine all the rest n+- is bounded by the minumum of r- and n+
+            for m_mp in range(0,min(r_m, n_p)):
+    
+                # n+-
+                m_pm = r_p - m_pp
+                # n--
+                m_mm = r_m - m_mp
+                # n0+
+                m_zp = n_p - (m_pp + m_mp)
+                # n0-
+                m_zm = n_m - (m_pm + m_mm)
+                contingencyTableValues = [m_pp, m_pm, m_mp, m_mm, m_zp, m_zm]
 
-            # n+-
-            m_pm < - r_p - m_pp
-        # n--
-        m_mm < - r_m - m_mp
-        # n0+
-        m_zp < - n_p - (m_pp + m_mp)
-        # n0-
-        m_zm < - n_m - (m_pm + m_mm)
-        contingencyTableValues < - c(m_pp, m_pm, m_mp, m_mm, m_zp, m_zm)
+                m_pz = prediction_list_stats[1] - r_p
+                m_mz = prediction_list_stats[2] - r_m
+                m_zz = prediction_list_stats[3] - r_z
+    
+                # None of these values can be less than zero
+                if min(contingencyTableValues) < 0:
+                    continue
 
-        m_pz < - prediction_list_stats[1] - r_p
-        m_mz < - prediction_list_stats[2] - r_m
-        m_zz < - prediction_list_stats[3] - r_z
+                threeByThreeContingencyTable = [m_pp, m_pm, m_pz, m_mp, m_mm, m_mz, m_zp, m_zm, m_zz]
+                logDValue = sum(log_of_factorial_of_prediction_list_stats) - sum(lfactorial(threeByThreeContingencyTable))
+            # Only need to compute the score if the D-value is non-neglible
+            if logDValue > logepsDMax:
 
-        # None of these values can be less than zero
-        if (min(contingencyTableValues) >= 0)
-        {
-
-            threeByThreeContingencyTable < - c(m_pp, m_pm, m_pz, m_mp, m_mm, m_mz, m_zp, m_zm, m_zz)
-        logDValue < - sum(log_of_factorial_of_prediction_list_stats) - sum(lfactorial(threeByThreeContingencyTable))
-        # Only need to compute the score if the D-value is non-neglible
-        if (logDValue > logepsDMax)
-        {
-            weight_contrib < - exp(logDValue - logDMax)
-        weights[2] < - weights[2] + weight_contrib
+                weight_contrib = math.exp(logDValue - logDMax)
+                weights[2] = weights[2] + weight_contrib
 
         # Rather than just calculate the DValue by taking the exponential of logDvalue, we first subtract a constant.  This means when we take the
         # exponential we get the DValue divided by a different constant, but this cancels out when we take ratios later when computing the p-value

@@ -8,9 +8,9 @@ import numpy as np
 import math
 
 from miscellaneous import get_all_rounding_combinations
+from weights import calculate_weight_given_values_in_three_by_three_contingency_table
 
-
-def find_approximate_values__maximise_d_value(prediction_stats, experimental_data_stats):
+def find_approximate_values_maximise_d_value(prediction_stats, experimental_data_stats):
     '''Helper function for findMaximumDValue: Finds an approximate table values to maximise D.
     Given the values of q+, q-, q0, n+, n- and n0 this function will produce the approximate values
     of n++, n+-, n-+ and n-- that will maximise the D value. See Assessing statistical significance of 
@@ -79,7 +79,7 @@ def get_maximum_d_value_from_2_x_2_contingency_table(contingency_table, predicti
             prediction_stats, experimental_data_stats)
         # Some of the combinationations produce an invalid contingency table - this we can check by seeing if any of the values in the table are negative.
         if threeByThreeContingencyTable.min() >= 0:  # if 3x3ContTable is matrix or nparray! otherwise change to min(x)
-            weight = calculateWeightGivenValuesInThreeByThreeContingencyTable(threeByThreeContingencyTable,
+            weight = calculate_weight_given_values_in_three_by_three_contingency_table(threeByThreeContingencyTable,
                                                                               log_of_factorial_prediction_stats,
                                                                               return_log)
             # what type is weight? If not integer/float, max needs to be changed (e.g. for list max(max(weight), maximumDValue))
@@ -87,68 +87,32 @@ def get_maximum_d_value_from_2_x_2_contingency_table(contingency_table, predicti
     return maximumDValue
 
 
-def findMaximumDValue(predictionListStats, experimentalDataStats, logOfFactorialOfPredictionListStats, returnlog=FALSE):
+def find_maximum_d_value(prediction_stats, experimental_data_stats, log_factorial_prediction_stats, returnlog=False):
     '''Helper function for cubic1b: Find maximum D value - computes the maximum possible D-value for given values q+, q-, q0 and n+, n-, n0.
-    @param predictionListStats a vector containing the predicted values q+, q- and q0:
+    @param prediction_stats a vector containing the predicted values q+, q- and q0:
     numbers of positive, negative and non-significant/contradictory predictions
-    @param experimentalDataStats A vector containing the observed values n+, n- and n0:
+    @param experimental_data_stats A vector containing the observed values n+, n- and n0:
     numbers of positive, negative and non-significant/contradictory observations
-    @param logOfFactorialOfPredictionListStats a vector containing the log of the factorial value for
-    each entry in predictionListStats
+    @param log_factorial_prediction_stats a vector containing the log of the factorial value for
+    each entry in prediction_stats
     @param returnlog should the result be returned as a log; default FALSE
     @return the maximum possible D value'''
 
-    twoByTwoContingencyTable = find_approximate_values__maximise_d_value(predictionListStats, experimentalDataStats)
+    contingency_table = find_approximate_values_maximise_d_value(prediction_stats, experimental_data_stats)
 
-    maximumDValue = get_maximum_d_value_from_2_x_2_contingency_table(twoByTwoContingencyTable, predictionListStats,
-                                                                     experimentalDataStats,
-                                                                     logOfFactorialOfPredictionListStats,
+    maximumDValue = get_maximum_d_value_from_2_x_2_contingency_table(contingency_table, prediction_stats,
+                                                                     experimental_data_stats,
+                                                                     log_factorial_prediction_stats,
                                                                      returnlog)
 
     return maximumDValue
 
 
-def getWeightsAboveHypothesisScoreForAThreeByTwoTable(weights, r_p, r_m, r_z, n_p, n_m, predictionListStats,
-                                                      experimentalDataStats,
-                                                      logOfFactorialOfPredictionListStats, hypothesisScore, logepsDMax,
-                                                      logDMax):
+def get_weights_above_hypothesis_score_for_3_2_table(weights, r_p, r_m, r_z, n_p, n_m, predictionListStats,
+                                                     experimentalDataStats,
+                                                     logOfFactorialOfPredictionListStats, hypothesisScore, logepsDMax,
+                                                     logDMax):
     '''Helper function for cubic1b: '''
     return [0, 0]
 
 
-def cubic1b(hypothesis_score, prediction_stats, experimental_data_stats, epsilon):
-    '''Calculate the p-value of a score given the hypothesis score and the 
-    distribution table (calculated using the cubic algorithm  1b in 
-    Assessing statistical significance in causal graphs - Chindelevitch et al) 
-    '''
-    # Calculate the log of the factorial for all values in predictionListStats,
-    # this is to reduce the number of computations done later on.
-    log_factorial_prediction_stats = [math.log(math.factorial(n)) for n in prediction_stats]
-    logDMax = findMaximumDValue(prediction_stats, experimental_data_stats, log_factorial_prediction_stats, TRUE)
-
-    q_p, q_m = prediction_stats[0:2]
-    n_p, n_m = experimental_data_stats[0:2]
-
-    # Array for the D values - first element is the total D values which have a score equal to or better than the cut-off, second element is all D
-    # values (i.e. the ratio is the P value).
-    logepsDMax = math.log(epsilon) + logDMax  # or [n+math.log(epsilon) for n in logDMax] #
-    weights = [0, 0]
-
-    # In algorithm a superfamily is defined by the left 3x2 submatrix of the contingency table. Now we only need to interate over two quantities: r+ and
-    # r-.
-    for r_p in range(0, q_p):
-        # for 0 to the limit of positive predictions
-        for r_m in range(0, q_m):
-            # for 0 to the limit of number of negative results Calculate r0
-            r_z = n_p + n_m - (r_p + r_m)
-            # Need to check that n00 is postive, to ensure it is a valid superfamily
-            if r_z <= prediction_stats[2] and r_z >= 0:
-                # The five values in the array below define the superfamily
-                weights = getWeightsAboveHypothesisScoreForAThreeByTwoTable(weights, r_p, r_m, r_z, n_p, n_m,
-                                                                            prediction_stats, experimental_data_stats,
-                                                                            log_factorial_prediction_stats,
-                                                                            hypothesis_score, logepsDMax, logDMax)
-
-        p_value = weights[0] / weights[1]
-
-    return p_value

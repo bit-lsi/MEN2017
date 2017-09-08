@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
@@ -97,12 +99,19 @@ def CalculateEnrichmentPValue(predictions, results):
         setOfNonDifferentiallyExpressedGenes) - numSignificantPredictionsThatAreUnresponsive
 
     contingencyTable = pd.DataFrame(
-        np.r_(numSignificantPredictionsThatAreResponsive, numSignificantPredictionsThatAreUnresponsive,
+        np.r_[numSignificantPredictionsThatAreResponsive, numSignificantPredictionsThatAreUnresponsive,
               numZeroPredictionsThatAreResponsive,
-              numZeroPredictionsThatAreUnreponsive), index=2)
+              numZeroPredictionsThatAreUnreponsive], index=2)
+
 
     enrichmentPValue = stats.fisher_exact(contingencyTable, alternative="greater")
 
     print(enrichmentPValue)
 
     return enrichmentPValue
+
+
+if __name__ == '__main__':
+    predictions = pd.DataFrame(np.r_[1,2,3,1,1,-1], columns = 2)
+    results = pd.DataFrame(np.r_[1,2,3,4,1,1,-1,1], columns = 2)
+    CalculateEnrichmentPValue(predictions, results)

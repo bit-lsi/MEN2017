@@ -25,8 +25,8 @@ def calculate_weight_given_values_in_three_by_three_contingency_table(threeByThr
 
 
 def get_weights_above_hypothesis_score_for_a_three_by_two_table(
-        weights, r_p, r_m, r_z, n_p, n_m, predictionListStats, experimentalDataStats,
-        logOfFactorialOfPredictionListStats,
+        weights, r_p, r_m, r_z, n_p, n_m, prediction_list_stats, experimentalDataStats,
+        log_of_factorial_of_prediction_list_stats,
         hypothesisScore, logepsDMax, logDMax):
     """ Finds the D-Values (weights) from any 3x2 contingency tables that have a score above and including the
     hypothesis score. It also calculates the total weight, and returns a 2x1 vector of the two values.
@@ -38,17 +38,17 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
     :param r_z:
     :param n_p:
     :param n_m:
-    :param predictionListStats:
+    :param prediction_list_stats:
     :param experimentalDataStats:
-    :param logOfFactorialOfPredictionListStats:
+    :param log_of_factorial_of_prediction_list_stats:
     :param hypothesisScore:
     :param logepsDMax:
     :param logDMax:
     :return:
     """
 
-    log_approx_d_family_max = get_max_d_value_for_a_three_by_two_family(r_p, r_m, r_z, n_p, n_m, predictionListStats,
-                                                                        logOfFactorialOfPredictionListStats, True)
+    log_approx_d_family_max = get_max_d_value_for_a_three_by_two_family(r_p, r_m, r_z, n_p, n_m, prediction_list_stats,
+                                                                        log_of_factorial_of_prediction_list_stats, True)
 
     # To reduce the overall runtime of the algorithm, the approximate maxDValue for the family is calculated, rather than the actual.
     if log_approx_d_family_max > logepsDMax:
@@ -92,16 +92,16 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
         m_zm < - n_m - (m_pm + m_mm)
         contingencyTableValues < - c(m_pp, m_pm, m_mp, m_mm, m_zp, m_zm)
 
-        m_pz < - predictionListStats[1] - r_p
-        m_mz < - predictionListStats[2] - r_m
-        m_zz < - predictionListStats[3] - r_z
+        m_pz < - prediction_list_stats[1] - r_p
+        m_mz < - prediction_list_stats[2] - r_m
+        m_zz < - prediction_list_stats[3] - r_z
 
         # None of these values can be less than zero
         if (min(contingencyTableValues) >= 0)
         {
 
             threeByThreeContingencyTable < - c(m_pp, m_pm, m_pz, m_mp, m_mm, m_mz, m_zp, m_zm, m_zz)
-        logDValue < - sum(logOfFactorialOfPredictionListStats) - sum(lfactorial(threeByThreeContingencyTable))
+        logDValue < - sum(log_of_factorial_of_prediction_list_stats) - sum(lfactorial(threeByThreeContingencyTable))
         # Only need to compute the score if the D-value is non-neglible
         if (logDValue > logepsDMax)
         {
@@ -137,16 +137,16 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
         m_zm < - n_m - (m_pm + m_mm)
         contingencyTableValues < - c(m_pp, m_pm, m_mp, m_mm, m_zp, m_zm)
 
-        m_pz < - predictionListStats[1] - r_p
-        m_mz < - predictionListStats[2] - r_m
-        m_zz < - predictionListStats[3] - r_z
+        m_pz < - prediction_list_stats[1] - r_p
+        m_mz < - prediction_list_stats[2] - r_m
+        m_zz < - prediction_list_stats[3] - r_z
 
         # None of these values can be less than zero
         if (min(contingencyTableValues) >= 0)
         {
 
             threeByThreeContingencyTable < - c(m_pp, m_pm, m_pz, m_mp, m_mm, m_mz, m_zp, m_zm, m_zz)
-        logDValue < - sum(logOfFactorialOfPredictionListStats) - sum(lfactorial(threeByThreeContingencyTable))
+        logDValue < - sum(log_of_factorial_of_prediction_list_stats) - sum(lfactorial(threeByThreeContingencyTable))
 
         # Only need to compute the score if the D-value is non-neglible
         if (logDValue > logepsDMax)

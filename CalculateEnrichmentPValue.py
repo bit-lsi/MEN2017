@@ -1,15 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import numpy as np
-import pandas as pd
 import scipy.stats as stats
-
-
-def data_frame_to_set(data_frame):
-    return set([
-        tuple(line)
-        for line in data_frame.values.tolist()
-    ])
 
 
 # ' @title get set of significant predictions
@@ -22,18 +14,18 @@ def data_frame_to_set(data_frame):
 # ' L Chindelevitch et al.
 # ' Causal reasoning on biological networks: Interpreting transcriptional changes.
 # ' Bioinformatics, 28(8):1114-21, 2012.
-def GetSetOfSignificantPredictions(predictions):
-    counter = 1
-    numPredictions = predictions.shape[0]
-    significantPredictions = pd.DataFrame(0, index=numPredictions, columns=1)
-    for i in range(1, numPredictions):
-        if int(predictions.ix[i, 2] != 0):
-            significantPredictions.ix[counter, 1] = predictions.ix[i, 1]
+def get_set_of_significant_predictions(predictions):
+    counter = 0
+    num_predictions = predictions.shape[0]
+    significant_predictions = np.zeros((num_predictions, 1))
+    for i in range(0, num_predictions):
+        if int(predictions[i, 1] != 0):
+            significant_predictions[counter, 0] = predictions[i, 0]
             counter = counter + 1
 
-    significantPredictions = significantPredictions.loc[1:counter - 1]
+    significant_predictions = significant_predictions[1:counter]
 
-    return significantPredictions
+    return significant_predictions
 
 
 # ' @title get set of differientially expressed genes
@@ -46,18 +38,18 @@ def GetSetOfSignificantPredictions(predictions):
 # ' L Chindelevitch et al.
 # ' Causal reasoning on biological networks: Interpreting transcriptional changes.
 # ' Bioinformatics, 28(8):1114-21, 2012.
-def GetSetOfDifferentiallyExpressedGenes(results):
-    counter = 1
-    numResults = results.shape[0]
-    differentiallyExpressedGenes = pd.DataFrame(0, index=numResults, columns=1)
-    for i in range(1, numResults):
-        if int(results.ix[i, 2] != 0):
-            differentiallyExpressedGenes.ix[counter, 1] = results[i, 1]
+def get_set_of_differentially_expressed_genes(results):
+    counter = 0
+    num_results = results.shape[0]
+    differentially_expressed_genes = np.zeros((num_results, 1))
+    for i in range(0, num_results):
+        if int(results[i, 1] != 0):
+            differentially_expressed_genes[counter, 0] = results[i, 0]
             counter = counter + 1
 
-    differentiallyExpressedGenes = differentiallyExpressedGenes.loc[1:counter - 1]
+    differentially_expressed_genes = differentially_expressed_genes[0:counter]
 
-    return differentiallyExpressedGenes
+    return differentially_expressed_genes
 
 
 # ' calculates an enrichment p-value
@@ -72,39 +64,43 @@ def GetSetOfDifferentiallyExpressedGenes(results):
 # ' @examples
 # ' predictions <- matrix(c(1,2,3,1,1,-1), ncol = 2)
 # ' results<- matrix(c(1,2,3,4,1,1,-1,1), ncol = 2)
-def CalculateEnrichmentPValue(predictions, results):
+def calculate_enrichment_p_value(predictions, results):
     """
 
     :param predictions:
-    :param pd.DataFrame results:
+    :param numpy.array results:
     :return:
     """
 
-    setOfSignificantPredictions = data_frame_to_set(GetSetOfSignificantPredictions(predictions))
-    setOfDifferentiallyExpressedGenes = data_frame_to_set(GetSetOfDifferentiallyExpressedGenes(results))
+    set_of_significant_predictions = get_set_of_significant_predictions(predictions)
+    set_of_differentially_expressed_genes = get_set_of_differentially_expressed_genes(results)
 
-    setOfNonDifferentiallyExpressedGenes = results.ix[:, 1].difference(setOfDifferentiallyExpressedGenes)
+    set_of_non_differentially_expressed_genes = np.setdiff1d(results[:, 0], set_of_differentially_expressed_genes)
 
     # n_pp + n_pm + n_mp + n_mm
-    numSignificantPredictionsThatAreResponsive = len(
-        setOfSignificantPredictions.intersection(setOfDifferentiallyExpressedGenes))
+    num_significant_predictions_that_are_responsive = len(
+        np.intersect1d(set_of_significant_predictions, set_of_differentially_expressed_genes))
     # n+0 + n-0
-    numSignificantPredictionsThatAreUnresponsive = len(
-        setOfSignificantPredictions.intersection(setOfNonDifferentiallyExpressedGenes))
+    num_significant_predictions_that_are_unresponsive = len(
+        np.intersect1d(set_of_significant_predictions, set_of_non_differentially_expressed_genes))
     # n0+ + n0-
-    numZeroPredictionsThatAreResponsive = len(
-        setOfDifferentiallyExpressedGenes) - numSignificantPredictionsThatAreResponsive
+    num_zeroPredictions_that_are_responsive = len(
+        set_of_differentially_expressed_genes) - num_significant_predictions_that_are_responsive
     # n00
-    numZeroPredictionsThatAreUnreponsive = len(
-        setOfNonDifferentiallyExpressedGenes) - numSignificantPredictionsThatAreUnresponsive
+    num_zeroPredictions_that_are_unreponsive = len(
+        set_of_non_differentially_expressed_genes) - num_significant_predictions_that_are_unresponsive
 
-    contingencyTable = pd.DataFrame(
-        np.r_(numSignificantPredictionsThatAreResponsive, numSignificantPredictionsThatAreUnresponsive,
-              numZeroPredictionsThatAreResponsive,
-              numZeroPredictionsThatAreUnreponsive), index=2)
+    contingency_table = np.array(
+        [[num_significant_predictions_that_are_responsive, num_significant_predictions_that_are_unresponsive],
+         [num_zeroPredictions_that_are_responsive,
+          num_zeroPredictions_that_are_unreponsive]])
 
-    enrichmentPValue = stats.fisher_exact(contingencyTable, alternative="greater")
+    enrichment_p_value = stats.fisher_exact(contingency_table, alternative="greater")
 
-    print(enrichmentPValue)
+    return enrichment_p_value
 
-    return enrichmentPValue
+
+if __name__ == '__main__':
+    predictions = np.array([[1, 2, 3, 1, 1, -1], [1, 2, 3, 1, 1, -1]])
+    results = np.array([[1, 2, 3, 4, 1, 1, -1, 1], [1, 2, 3, 4, 1, 1, -1, 1]])
+    calculate_enrichment_p_value(predictions, results)

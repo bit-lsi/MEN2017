@@ -144,7 +144,7 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
                     continue
 
                 threeByThreeContingencyTable = [m_pp, m_pm, m_pz, m_mp, m_mm, m_mz, m_zp, m_zm, m_zz]
-                logDValue = sum(log_of_factorial_of_prediction_list_stats) - sum(lfactorial(threeByThreeContingencyTable))
+                logDValue = sum(log_of_factorial_of_prediction_list_stats) - sum(math.log(math.factorial(threeByThreeContingencyTable)))
             # Only need to compute the score if the D-value is non-neglible
             if logDValue > logepsDMax:
 
@@ -196,7 +196,7 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
         {
             # Rather than just calculate the DValue by taking the exponential of logDvalue, we first subtract a constant.  This means when we take the
             # exponential we get the DValue divided by a different constant, but this cancels out when we take ratios later when computing the p-value
-            weight_contrib < - exp(logDValue - logDMax)
+            weight_contrib < - math.exp(logDValue - logDMax)
         weights[2] < - weights[2] + weight_contrib
         if (m_pp + m_mm - (m_pm + m_mp) >= hypothesisScore)
         {

@@ -2,7 +2,6 @@ __pycache__
 *.pyc
 .DS_Store
 */.DS_Store
-../psychodb/.idea
 *.db/*
 nohup.out
 .pydevproject
@@ -57,7 +56,6 @@ htmlcov/
 .tox/
 .coverage
 .coverage.*
-.cache
 nosetests.xml
 coverage.xml
 *,cover
@@ -85,8 +83,6 @@ docs/_build/
 target/
 
 # IPython Notebook
-.ipynb_checkpoints
-
 # pyenv
 .python-version
 

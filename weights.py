@@ -4,8 +4,8 @@ import math
 
 
 def calculate_weight_given_values_in_three_by_three_contingency_table(threeByThreeContingencyTable,
-                                                                     logOfFactorialOfPredictionListStats,
-                                                                     returnlog=False):
+                                                                      logOfFactorialOfPredictionListStats,
+                                                                      returnlog=False):
     """Given the values in the three by three contingency table and the values of the number of positive/negative/non-significant predictions (q+, q-, q0) this function calculates the D-value (or weight).
     
     :param threeByThreeContingencyTable a 3x3 contingency table
@@ -17,7 +17,7 @@ def calculate_weight_given_values_in_three_by_three_contingency_table(threeByThr
 
     # The D value is defined as: (q+! / (n++! * n+-! * n+0!)) * (q-! / (n-+! * n--! * n-0!)) * (q0! / (n0+! * n0-! * n00!))
     if returnlog:
-        return (sum(logOfFactorialOfPredictionListStats) - sum(math.log(math.factorial(threeByThreeContingencyTable))))
+        return sum(logOfFactorialOfPredictionListStats) - sum(math.log(math.factorial(threeByThreeContingencyTable)))
     else:
         return (
             math.exp(

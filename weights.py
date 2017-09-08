@@ -180,27 +180,22 @@ def get_weights_above_hypothesis_score_for_a_three_by_two_table(
         m_zz = prediction_list_stats[3] - r_z
 
         # None of these values can be less than zero
-        if (min(contingencyTableValues) >= 0)
-        {
+        if min(contingencyTableValues) >= 0:
 
-            threeByThreeContingencyTable < - c(m_pp, m_pm, m_pz, m_mp, m_mm, m_mz, m_zp, m_zm, m_zz)
-        logDValue < - sum(log_of_factorial_of_prediction_list_stats) - sum(lfactorial(threeByThreeContingencyTable))
+
+            threeByThreeContingencyTable = [m_pp, m_pm, m_pz, m_mp, m_mm, m_mz, m_zp, m_zm, m_zz]
+            logDValue = math.log(math.factorial(log_of_factorial_of_prediction_list_stats)) - math.log(math.factorial(threeByThreeContingencyTable))
 
         # Only need to compute the score if the D-value is non-neglible
-        if (logDValue > logepsDMax)
-        {
+        if logDValue > logepsDMax:
+
             # Rather than just calculate the DValue by taking the exponential of logDvalue, we first subtract a constant.  This means when we take the
             # exponential we get the DValue divided by a different constant, but this cancels out when we take ratios later when computing the p-value
-            weight_contrib < - math.exp(logDValue - logDMax)
-        weights[2] < - weights[2] + weight_contrib
-        if (m_pp + m_mm - (m_pm + m_mp) >= hypothesisScore)
-        {
-            weights[1] < - weights[1] + weight_contrib
-        }
-        }
-        }
-        }
-        }
-        }
-        }
-        return (weights)
+            weight_contrib = math.exp(logDValue - logDMax)
+            weights[2] = weights[2] + weight_contrib
+
+        if (m_pp + m_mm - (m_pm + m_mp) >= hypothesisScore):
+
+            weights[1] = weights[1] + weight_contrib
+
+        return weights
